@@ -1,7 +1,24 @@
 <a href="{% url 'imacs_app:task_list_delete' task_list.id %}">Supprimer</a>
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ forms.task_list_name.as_p }}
+    <input type="hidden" name="selected_form" value="task_list_name" />
     <input type="submit" value="Modifier">
 </form>
 
+
+<form method="post">
+    {% csrf_token %}
+    {{ forms.new_user.as_p }}
+    <input type="hidden" name="selected_form" value="new_user" />
+    <input type="submit" value="Ajouter">
+</form>
+
+{% for user in task_list.users.all %}
+<form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="selected_form" value="delete_user" />
+    <input type="hidden" name="user" value="{{user.username}}" />
+    {{ user.username }} <input type="submit" value="Supprimer" />
+</form>
+{% endfor %}

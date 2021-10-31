@@ -2,6 +2,7 @@
 <a href="{% url 'imacs_app:task_delete' task.id %}">Supprimer</a><br /><br />
 <form method="post">
     {% csrf_token %}
+    <label for="task_category"> Catégorie : </label> {{ form.task_category }} <br />
     <label for="name"> Nom : </label> {{ form.name }} <br />
     <label for="duration"> Durée : </label> {{ form.duration }} minutes <br />
     <label for="period"> Période : </label> {{ form.period }} jours <br />
