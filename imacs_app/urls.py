@@ -1,6 +1,7 @@
 from django.urls import path, include
 
 from . import views
+import django.contrib.auth.views as auth_views
 
 app_name = 'imacs_app'
 urlpatterns = [
@@ -19,5 +20,8 @@ urlpatterns = [
     path('task/<int:task_id>/add_done_now', views.TaskDoneAddNow.as_view(), name='task_done_add_now'),
     path('task/<int:task_id>/add_done', views.TaskDoneAdd.as_view(), name='task_done_add'),
     path('task_done/<int:task_done_id>/delete', views.TaskDoneDelete.as_view(), name='task_done_delete'),
+
+    path('login', auth_views.LoginView.as_view(), name='login'),
+    path('logout', auth_views.LogoutView.as_view(), name='logout'),
 ]
 

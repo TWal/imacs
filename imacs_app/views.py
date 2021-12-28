@@ -317,4 +317,3 @@ class TaskDoneDelete(UserCanViewTaskDoneMixin, generic.edit.DeleteView):
     pk_url_kwarg = 'task_done_id'
     def get_success_url(self):
         return reverse('imacs_app:task_modify', kwargs={'task_id': self.object.task.id})
-
