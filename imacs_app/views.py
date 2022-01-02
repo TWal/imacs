@@ -26,8 +26,8 @@ class UserCanViewTaskMixin(UserPassesTestMixin):
 
 class UserCanViewTaskDoneMixin(UserPassesTestMixin):
     def test_func(self):
-        task_id = self.kwargs['task_done_id']
-        return Task.objects.filter(pk=task_done_id, task__task_category__task_list__users=self.request.user).exists()
+        task_done_id = self.kwargs['task_done_id']
+        return Task.objects.filter(pk=task_done_id, task_category__task_list__users=self.request.user).exists()
 
 class TaskListList(generic.ListView):
     template_name = 'imacs_app/task_list_list.html'
