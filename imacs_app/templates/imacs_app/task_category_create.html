@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
+{% load breadcrumb %}
+{% block breadcrumb %}
+{% breadcrumb task_list %}
+{% breadcrumb_text_active 'Create category' %}
+{% endblock %}
+
 {% block content %}
 <form method="post">
     {% csrf_token %}

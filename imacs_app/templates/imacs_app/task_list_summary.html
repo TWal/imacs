@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 
+{% load breadcrumb %}
+{% block breadcrumb %}
+{% breadcrumb task_list %}
+{% breadcrumb_text_active 'Summary' %}
+{% endblock %}
+
+
 {% block content %}
 <h1 class="title is-1"> {{ task_list.name }} {{ task_list.minute_per_day }}</h1>
 <div class="block">

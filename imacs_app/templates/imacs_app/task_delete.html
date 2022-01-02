@@ -1,5 +1,13 @@
 {% extends "imacs_app/generic_delete.html" %}
 
+{% load breadcrumb %}
+{% block breadcrumb %}
+{% breadcrumb task.task_category.task_list %}
+{% breadcrumb task.task_category %}
+{% breadcrumb task %}
+{% breadcrumb_text_active 'Delete' %}
+{% endblock %}
+
 {% block delete_what %}
 la tâche "{{ task }}"
 {% endblock %}

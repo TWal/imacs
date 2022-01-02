@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
+{% load breadcrumb %}
+{% block breadcrumb %}
+{% breadcrumb_text_active 'Create task list' %}
+{% endblock %}
+
 {% block content %}
 <form method="post">
     {% csrf_token %}

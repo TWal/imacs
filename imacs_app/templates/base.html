@@ -10,6 +10,13 @@
     <body>
         {% include 'header.html' %}
 
+        <nav class="breadcrumb container block" aria-label="breadcrumbs">
+            <ul>
+                <li> <a href="{% url 'imacs_app:task_list_list' %}">IMACS</a> </li>
+                {% block breadcrumb %}{% endblock %}
+            </ul>
+        </nav>
+
         <div class="container">
         {% block content %}{% endblock %}
         </div>

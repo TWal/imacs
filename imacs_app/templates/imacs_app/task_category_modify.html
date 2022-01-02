@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 
+{% load breadcrumb %}
+{% block breadcrumb %}
+{% breadcrumb task_category.task_list %}
+{% breadcrumb task_category %}
+{% breadcrumb_text_active 'Modify' %}
+{% endblock %}
+
 {% block content %}
 <a class="button is-danger" href="{% url 'imacs_app:task_category_delete' task_category.id %}">Supprimer</a>
 <form method="post">

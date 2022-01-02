@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
+{% load breadcrumb %}
+{% block breadcrumb %}
+{% breadcrumb task_list %}
+{% breadcrumb_text_active 'To do' %}
+{% endblock %}
+
 {% block content %}
 <h1 class="title is-1"> {{ task_list.name }}</h1>
 <a class="button is-warning" href="{% url 'imacs_app:task_list_summary' task_list.id %}">Modifier</a>

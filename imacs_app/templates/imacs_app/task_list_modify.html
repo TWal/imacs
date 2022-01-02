@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 
+{% load breadcrumb %}
+{% block breadcrumb %}
+{% breadcrumb task_list %}
+{% breadcrumb_text_active 'Modify' %}
+{% endblock %}
+
 {% block content %}
-<a class="button is-danger" href="{% url 'imacs_app:task_list_delete' task_list.id %}">Supprimer</a>
-<form method="post">
+<a class="block button is-danger" href="{% url 'imacs_app:task_list_delete' task_list.id %}">Supprimer</a>
+<form method="post" class="block">
     {% csrf_token %}
     {% with forms.task_list_name as form %}
         {% include 'forms/form.html' %}
@@ -12,7 +18,7 @@
 </form>
 
 
-<form method="post">
+<form method="post" class="block">
     {% csrf_token %}
     {% with forms.new_user as form %}
         {% include 'forms/form.html' %}
@@ -22,7 +28,7 @@
 </form>
 
 {% for user in task_list.users.all %}
-<form method="post">
+<form method="post" class="block">
     {% csrf_token %}
     <input type="hidden" name="selected_form" value="delete_user" />
     <input type="hidden" name="user" value="{{user.username}}" />

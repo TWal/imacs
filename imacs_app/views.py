@@ -207,6 +207,11 @@ class TaskCategoryCreate(UserCanViewTaskListMixin, generic.edit.CreateView):
     template_name = 'imacs_app/task_category_create.html'
     fields = ['name']
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['task_list'] = get_object_or_404(TaskList, pk=self.kwargs['task_list_id'])
+        return context
+
     def get_success_url(self):
         return reverse('imacs_app:task_list_create_task', kwargs={'task_list_id': self.kwargs['task_list_id']})
 
@@ -289,6 +294,11 @@ class TaskDoneAddNow(UserCanViewTaskMixin, generic.edit.CreateView):
     fields = ['duration']
     pk_url_kwarg = 'task_id'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['task'] = get_object_or_404(Task, pk=self.kwargs['task_id'])
+        return context
+
     def get_success_url(self):
         return reverse('imacs_app:task_list_todo', kwargs={'task_list_id': self.object.task.task_category.task_list.id})
 
@@ -301,6 +311,11 @@ class TaskDoneAdd(UserCanViewTaskMixin, generic.edit.CreateView):
     template_name = 'imacs_app/task_add_done.html'
     fields = ['when', 'duration']
     pk_url_kwarg = 'task_id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['task'] = get_object_or_404(Task, pk=self.kwargs['task_id'])
+        return context
 
     def get_success_url(self):
         return reverse('imacs_app:task_modify', kwargs={'task_id': self.object.task.id})
@@ -315,5 +330,11 @@ class TaskDoneDelete(UserCanViewTaskDoneMixin, generic.edit.DeleteView):
     template_name = 'imacs_app/task_done_delete.html'
     context_object_name = 'task_done'
     pk_url_kwarg = 'task_done_id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['task_done'] = get_object_or_404(TaskDone, pk=self.kwargs['task_done_id'])
+        return context
+
     def get_success_url(self):
         return reverse('imacs_app:task_modify', kwargs={'task_id': self.object.task.id})

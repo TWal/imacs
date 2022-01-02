@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
+{% load breadcrumb %}
+{% block breadcrumb %}
+{% breadcrumb_text_active 'Home' %}
+{% endblock %}
+
 {% block content %}
 <a href="{% url 'imacs_app:task_list_create' %}">Nouvelle liste de tâches</a> <br /> <br />
 {% for task_list in task_lists %}

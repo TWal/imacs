@@ -1,5 +1,13 @@
 {% extends "imacs_app/generic_delete.html" %}
 
+{% load breadcrumb %}
+{% block breadcrumb %}
+{% breadcrumb task_done.task.task_category.task_list %}
+{% breadcrumb task_done.task.task_category %}
+{% breadcrumb task_done.task %}
+{% breadcrumb_text_active 'Remove task completion' %}
+{% endblock %}
+
 {% block delete_what %}
 la complétion de la tâche "{{ task_done.task }}" le {{ task_done.when }}
 {% endblock %}

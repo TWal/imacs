@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
+{% load breadcrumb %}
+{% block breadcrumb %}
+{% breadcrumb task_list %}
+{% breadcrumb_text_active 'Create task' %}
+{% endblock %}
+
 {% block content %}
 <a href="{% url 'imacs_app:task_list_create_task_category' task_list.id %}">Nouvelle catégorie</a> <br />
 <form method="post">
