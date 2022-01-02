@@ -1,0 +1,28 @@
+{% load form_tags %}
+
+<div class="field">
+{% if field|is_input %}
+    <label class="label" {% if field.auto_id %} for="{{ field.auto_id }}" {% endif %}> {{ field.label }} </label>
+    <div class="control">
+        {{ field | with_class:'input' }}
+{% elif field|is_select %}
+    <label class="label" {% if field.auto_id %} for="{{ field.auto_id }}" {% endif %}> {{ field.label }} </label>
+    <div class="control">
+        <div class="select{% if field.errors|length > 0 %} is-danger{% endif %}">
+            {{ field }}
+        </div>
+{% elif field|is_textarea %}
+    <label class="label" {% if field.auto_id %} for="{{ field.auto_id }}" {% endif %}> {{ field.label }} </label>
+    <div class="control">
+        {{ field | with_class:'textarea' }}
+{% else %}
+    <div class="control">
+TODO
+{% endif %}
+        {% for error in field.errors %}
+        <span class="help is-danger {{ form.error_css_class }}">{{ error }}</span>
+        {% endfor %}
+    </div> {# closes the control div in each if / elif #}
+</div>
+
+

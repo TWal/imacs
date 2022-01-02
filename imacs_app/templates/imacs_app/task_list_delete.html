@@ -1,5 +1,5 @@
-<form method="post">
-    {% csrf_token %}
-    <p>Voulez-vous vraiment supprimer la liste "{{ task_list }}" ?</p>
-    <input type="submit" value="Confirmer">
-</form>
+{% extends "imacs_app/generic_delete.html" %}
+
+{% block delete_what %}
+la liste "{{ task_list }}"
+{% endblock %}

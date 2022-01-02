@@ -1,17 +1,24 @@
-<a href="{% url 'imacs_app:task_list_delete' task_list.id %}">Supprimer</a>
+{% extends "base.html" %}
+
+{% block content %}
+<a class="button is-danger" href="{% url 'imacs_app:task_list_delete' task_list.id %}">Supprimer</a>
 <form method="post">
     {% csrf_token %}
-    {{ forms.task_list_name.as_p }}
+    {% with forms.task_list_name as form %}
+        {% include 'forms/form.html' %}
+    {% endwith %}
     <input type="hidden" name="selected_form" value="task_list_name" />
-    <input type="submit" value="Modifier">
+    <input type="submit" class="button is-primary" value="Modifier">
 </form>
 
 
 <form method="post">
     {% csrf_token %}
-    {{ forms.new_user.as_p }}
+    {% with forms.new_user as form %}
+        {% include 'forms/form.html' %}
+    {% endwith %}
     <input type="hidden" name="selected_form" value="new_user" />
-    <input type="submit" value="Ajouter">
+    <input type="submit" class="button is-primary" value="Ajouter">
 </form>
 
 {% for user in task_list.users.all %}
@@ -19,6 +26,7 @@
     {% csrf_token %}
     <input type="hidden" name="selected_form" value="delete_user" />
     <input type="hidden" name="user" value="{{user.username}}" />
-    {{ user.username }} <input type="submit" value="Supprimer" />
+    {{ user.username }} <input type="submit" class="button is-danger" value="Supprimer" />
 </form>
 {% endfor %}
+{% endblock %}

@@ -1,5 +1,5 @@
-<form method="post">
-    {% csrf_token %}
-    <p>Voulez-vous vraiment supprimer la catégorie "{{ task_category }}" ?</p>
-    <input type="submit" value="Confirmer">
-</form>
+{% extends "imacs_app/generic_delete.html" %}
+
+{% block delete_what %}
+la catégorie "{{ task_category }}"
+{% endblock %}

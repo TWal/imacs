@@ -1,10 +1,8 @@
-<h1> IMACS </h1>
-{% if user.is_authenticated %}
-<a href="{% url 'imacs_app:logout' %}">Logout</a> <br />
-{% else %}
-<a href="{% url 'imacs_app:login' %}">Login</a> <br />
-{% endif %}
+{% extends "base.html" %}
+
+{% block content %}
 <a href="{% url 'imacs_app:task_list_create' %}">Nouvelle liste de tâches</a> <br /> <br />
 {% for task_list in task_lists %}
     <a href="{% url 'imacs_app:task_list_todo' task_list.id %}">{{ task_list.name }}</a> <br />
 {% endfor %}
+{% endblock %}

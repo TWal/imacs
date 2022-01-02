@@ -1,14 +1,22 @@
-<h1> {{ task_list.name }} {{ task_list.minute_per_day }}</h1>
-<a href="{% url 'imacs_app:task_list_create_task' task_list.id %}">Nouvelle tâche</a> <br />
-<a href="{% url 'imacs_app:task_list_modify' task_list.id %}">Modifier le nom</a> <br />
-<a href="{% url 'imacs_app:task_list_delete' task_list.id %}">Supprimer</a> <br />
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="title is-1"> {{ task_list.name }} {{ task_list.minute_per_day }}</h1>
+<div class="block">
+    <a class="button is-link" href="{% url 'imacs_app:task_list_create_task' task_list.id %}">Nouvelle tâche</a>
+    <a class="button is-warning" href="{% url 'imacs_app:task_list_modify' task_list.id %}">Modifier le nom</a>
+    <a class="button is-danger" href="{% url 'imacs_app:task_list_delete' task_list.id %}">Supprimer</a>
+</div>
 {% for task_category in task_list.taskcategory_set.all %}
-    <h3> {{ task_category.name }} {{ task_category.minute_per_day }} <a href="{% url 'imacs_app:task_category_modify' task_category.id %}"> Modifier </a></h3>
+    <h3 class="title"> {{ task_category.name }} {{ task_category.minute_per_day }} <a class="button is-warning" href="{% url 'imacs_app:task_category_modify' task_category.id %}"> Modifier </a></h3>
     {% for task in task_category.task_set.all %}
-    <details>
-        <summary>{{ task.name }} ({{ task.duration }}min / {{ task.period }}j) <a href="{% url 'imacs_app:task_modify' task.id %}"> Modifier </a></summary>
+    <details class="block">
+        <summary>{{ task.name }} ({{ task.duration }}min / {{ task.period }}j) <a class="button is-small is-warning" href="{% url 'imacs_app:task_modify' task.id %}"> Modifier </a></summary>
+        <div class="box">
         {{ task.description }}
         <br />{{ task.last_done }} {{ task.priority }}
+        </div>
     </details>
     {% endfor %}
 {% endfor %}
+{% endblock %}

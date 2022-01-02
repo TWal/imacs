@@ -1,7 +1,10 @@
-<form method="post">
-    <a href="{% url 'imacs_app:task_list_create_task_category' task_list.id %}">Nouvelle catégorie</a> <br />
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Créer">
-</form>
+{% extends "base.html" %}
 
+{% block content %}
+<a href="{% url 'imacs_app:task_list_create_task_category' task_list.id %}">Nouvelle catégorie</a> <br />
+<form method="post">
+    {% csrf_token %}
+    {% include 'forms/form.html' %}
+    <input type="submit" class="button is-primary" value="Créer">
+</form>
+{% endblock %}

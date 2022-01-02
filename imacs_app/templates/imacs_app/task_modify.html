@@ -1,17 +1,17 @@
-<h1>Modification de l'item "{{ task }}"</h1>
-<a href="{% url 'imacs_app:task_delete' task.id %}">Supprimer</a><br /><br />
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="title is-1">Modification de l'item "{{ task }}"</h1>
+<a class="button is-danger" href="{% url 'imacs_app:task_delete' task.id %}">Supprimer</a><br /><br />
 <form method="post">
     {% csrf_token %}
-    <label for="task_category"> Catégorie : </label> {{ form.task_category }} <br />
-    <label for="name"> Nom : </label> {{ form.name }} <br />
-    <label for="duration"> Durée : </label> {{ form.duration }} minutes <br />
-    <label for="period"> Période : </label> {{ form.period }} jours <br />
-    <label for="description"> Description : </label> <br />
-    {{ form.description }} <br />
-    <input type="submit" value="Sauvegarder" />
+    {% include 'forms/form.html' %}
+    <input type="submit" class="button is-primary" value="Sauvegarder" />
 </form>
 
 <a href="{% url 'imacs_app:task_done_add' task.id %}">Ajouter une complétion de la tâche</a> <br />
 {% for task_done in task_dones %}
 {{ task_done.when }} ({{ task_done.duration }} min)<a href="{% url 'imacs_app:task_done_delete' task_done.id %}">Supprimer</a> <br />
 {% endfor %}
+
+{% endblock %}

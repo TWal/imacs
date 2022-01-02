@@ -1,5 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Se connecter">
+    {% include 'forms/form.html' %}
+    <input type="submit" class="button is-primary" value="Se connecter">
 </form>
+{% endblock %}

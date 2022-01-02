@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'imacs_app/bulma-0.9.3.min.css' %}">
+        <title>{% block title %}IMACS{% endblock %}</title>
+    </head>
+    <body>
+        <nav class="navbar container is-dark" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="{% url 'imacs_app:task_list_list' %}">
+                    IMACS
+                </a>
+            </div>
+            <div class="navbar-menu">
+                <div class="navbar-start"></div>
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        {% if user.is_authenticated %}
+                        <a class="button" href="{% url 'imacs_app:logout' %}">Logout</a> <br />
+                        {% else %}
+                        <a class="button" href="{% url 'imacs_app:login' %}">Login</a> <br />
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+        {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>
+
