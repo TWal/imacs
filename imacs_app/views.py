@@ -27,7 +27,7 @@ class UserCanViewTaskMixin(UserPassesTestMixin):
 class UserCanViewTaskDoneMixin(UserPassesTestMixin):
     def test_func(self):
         task_done_id = self.kwargs['task_done_id']
-        return Task.objects.filter(pk=task_done_id, task_category__task_list__users=self.request.user).exists()
+        return TaskDone.objects.filter(pk=task_done_id, task__task_category__task_list__users=self.request.user).exists()
 
 class TaskListList(generic.ListView):
     template_name = 'imacs_app/task_list_list.html'
@@ -323,7 +323,6 @@ class TaskDoneAdd(UserCanViewTaskMixin, generic.edit.CreateView):
     def form_valid(self, form):
         form.instance.task_id = self.kwargs['task_id']
         return super().form_valid(form)
-
 
 class TaskDoneDelete(UserCanViewTaskDoneMixin, generic.edit.DeleteView):
     model = TaskDone
