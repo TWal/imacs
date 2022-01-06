@@ -8,10 +8,14 @@
 
 {% block content %}
 <h1 class="title is-1"> {{ task_list.name }}</h1>
-<a class="button is-warning" href="{% url 'imacs_app:task_list_summary' task_list.id %}">Modifier</a>
-<ul class="block">
+<a class="block button is-warning" href="{% url 'imacs_app:task_list_summary' task_list.id %}">Modifier</a>
+<table class="table">
 {% for task in tasks %}
-<li><a href="{% url 'imacs_app:task_modify' task.id %}"> {{ task.task_category.name }}/{{ task.name }}</a> ({{ task.priority }}) <a href="{% url 'imacs_app:task_done_add_now' task.id %}">C'est fait !</a></li>
+<tr>
+    <td {% if task.priority >= 1.5 %}class="is-danger"{% elif task.priority >= 1 %}class="is-warning"{% endif %}>{{ task.priority | floatformat:2}}</td>
+    <td><a href="{% url 'imacs_app:task_modify' task.id %}"> {{ task.task_category.name }}/{{ task.name }}</a></td>
+    <td><a class="button is-primary" href="{% url 'imacs_app:task_done_add_now' task.id %}">C'est fait !</a></td>
+</tr>
 {% endfor %}
-</ul>
+</table>
 {% endblock %}
