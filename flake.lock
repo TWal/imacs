@@ -1,0 +1,41 @@
+{
+  "nodes": {
+    "django-nixos": {
+      "locked": {
+        "lastModified": 1641884400,
+        "narHash": "sha256-hYug4QhKtxcwY/B296WIUVr/dzvMa9okHtsNxvXzAGU=",
+        "owner": "pnmadelaine",
+        "repo": "django-nixos",
+        "rev": "09297caacd684b92ca55f5b76e4f700422da5385",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pnmadelaine",
+        "repo": "django-nixos",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1641710811,
+        "narHash": "sha256-yVJ+CtwWZY8BnkNIJ/ue5a28yrRM6CkDF1LvmGmqqwM=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "0ecf7d414811f831060cf55707c374d54fbb1dec",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "root": {
+      "inputs": {
+        "django-nixos": "django-nixos",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
