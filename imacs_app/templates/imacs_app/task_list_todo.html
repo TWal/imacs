@@ -8,7 +8,7 @@
 
 {% block content %}
 <h1 class="title is-1"> {{ task_list.name }}</h1>
-<a class="block button is-warning" href="{% url 'imacs_app:task_list_summary' task_list.id %}">Modifier</a>
+{% with "todo" as task_list_active_tab %}{% include 'imacs_app/task_list_tabs.html' %}{% endwith %}
 <table class="table">
 {% for task in tasks %}
 <tr>
