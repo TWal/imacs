@@ -5,7 +5,7 @@ from django.views import generic
 from django.forms import models as model_forms
 from django import forms
 from django.contrib import auth
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 
 from .models import TaskList, TaskCategory, Task, TaskDone
 
@@ -38,7 +38,7 @@ class TaskListList(generic.ListView):
         else:
             return []
 
-class TaskListCreate(generic.edit.CreateView):
+class TaskListCreate(LoginRequiredMixin, generic.edit.CreateView):
     model = TaskList
     template_name = 'imacs_app/task_list_create.html'
     fields = ['name']
