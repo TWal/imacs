@@ -4,6 +4,15 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
+from datetime import timedelta
+
+def compute_minute_per_day(tasks):
+    result = tasks.aggregate(minute_per_day=models.Sum((1.0*models.F('duration'))/models.F('period')))
+    return result['minute_per_day']
+
+def compute_duration(tasks):
+    result = tasks.aggregate(duration=models.Sum('duration'))
+    return result['duration']
 
 class TaskList(models.Model):
     name = models.CharField(max_length=200)
@@ -17,9 +26,23 @@ class TaskList(models.Model):
         return reverse('imacs_app:task_list_summary', kwargs={'task_list_id': self.pk})
 
     def minute_per_day(self):
-        tasks = Task.objects.filter(task_category__task_list = self)
-        result = tasks.aggregate(minute_per_day=models.Sum((1.0*models.F('duration'))/models.F('period')))
-        return result['minute_per_day']
+        return compute_minute_per_day(Task.objects.filter(task_category__task_list = self))
+    def hour_per_week(self):
+        return self.minute_per_day()*7/60
+
+    def minute_done_since(self, delta):
+        tasks = Task.objects.filter(task_category__task_list = self, taskdone__when__gte = timezone.now() - delta).distinct()
+        result = compute_duration(tasks)
+        return result if result is not None else 0
+
+    def minute_done_since_last_week(self):
+        return self.minute_done_since(timedelta(days=7))
+
+    def hour_done_since_last_week(self):
+        return self.minute_done_since_last_week()/60
+
+    def remaining_hours_this_week(self):
+        return max(0, self.hour_per_week() - self.hour_done_since_last_week())
 
 class TaskCategory(models.Model):
     task_list = models.ForeignKey(TaskList, on_delete=models.CASCADE)
@@ -33,9 +56,7 @@ class TaskCategory(models.Model):
         return reverse('imacs_app:task_category_modify', kwargs={'task_category_id': self.pk})
 
     def minute_per_day(self):
-        tasks = self.task_set
-        result = tasks.aggregate(minute_per_day=models.Sum((1.0*models.F('duration'))/models.F('period')))
-        return result['minute_per_day']
+        return compute_minute_per_day(self.task_set)
 
 class Task(models.Model):
     task_category = models.ForeignKey(TaskCategory, on_delete=models.CASCADE)

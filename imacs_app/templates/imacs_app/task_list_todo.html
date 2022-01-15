@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load breadcrumb %}
+{% load utils %}
 {% block breadcrumb %}
 {% breadcrumb task_list %}
 {% breadcrumb_text_active 'To do' %}
@@ -9,11 +10,26 @@
 {% block content %}
 <h1 class="title is-1"> {{ task_list.name }}</h1>
 {% with "todo" as task_list_active_tab %}{% include 'imacs_app/task_list_tabs.html' %}{% endwith %}
+
+<div class="block">
+Work time done last week: {{ task_list.hour_done_since_last_week | format_hours }}
+</div>
+<div class="block">
+Work time per week: {{ task_list.hour_per_week | format_hours }}
+</div>
+<div class="block">
+Remaining work time: {{ task_list.remaining_hours_this_week | format_hours }}
+</div>
+<div class="block container is-max-desktop">
+    <progress class="progress {% if task_list.hour_done_since_last_week < task_list.hour_per_week %}is-danger{% else %}is-success{% endif %}" value="{{ task_list.hour_done_since_last_week }}" max="{{ task_list.hour_per_week }}">{% widthratio task_list.hour_done_since_last_week task_list.hour_per_week 100 %}%</progress>
+</div>
+
 <table class="table">
 {% for task in tasks %}
 <tr>
-    <td {% if task.priority >= 1.5 %}class="is-danger"{% elif task.priority >= 1 %}class="is-warning"{% endif %}>{{ task.priority | floatformat:2}}</td>
+    <td {% if task.priority >= 1.5 %}class="is-danger"{% elif task.priority >= 1 %}class="is-warning"{% else %}class="is-success"{% endif %}>{{ task.priority | floatformat:2}}</td>
     <td><a href="{% url 'imacs_app:task_modify' task.id %}"> {{ task.task_category.name }}/{{ task.name }}</a></td>
+    <td>{{ task.duration }} min</td>
     <td><a class="button is-primary" href="{% url 'imacs_app:task_done_add_now' task.id %}">C'est fait !</a></td>
 </tr>
 {% endfor %}
