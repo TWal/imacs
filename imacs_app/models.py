@@ -23,7 +23,7 @@ class TaskList(models.Model):
     def get_name(self):
         return self.name
     def get_absolute_url(self):
-        return reverse('imacs_app:task_list_summary', kwargs={'task_list_id': self.pk})
+        return reverse('imacs_app:task_list_todo', kwargs={'task_list_id': self.pk})
 
     def minute_per_day(self):
         return compute_minute_per_day(Task.objects.filter(task_category__task_list = self))
@@ -67,7 +67,7 @@ class Task(models.Model):
     tasked_user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     def clean(self):
         if self.tasked_user:
-            if self.tasked_user not in self.task_category.task_list.users:
+            if self.tasked_user not in self.task_category.task_list.users.all():
                 raise ValidationError('Tasked user is not allowed to view the task')
 
     def __str__(self):
