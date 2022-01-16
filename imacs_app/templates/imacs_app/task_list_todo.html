@@ -31,6 +31,8 @@ Remaining work time: {{ task_list.remaining_hours_this_week | format_hours }}
     <td><a href="{% url 'imacs_app:task_modify' task.id %}"> {{ task.task_category.name }}/{{ task.name }}</a></td>
     <td>{{ task.duration }} min</td>
     <td><a class="button is-primary" href="{% url 'imacs_app:task_done_add_now' task.id %}">C'est fait !</a></td>
+    <td>{% if task.tasked_user %}{{ task.tasked_user }}{% else %}-{% endif %}</td>
+    <td><a class="button is-warning" href="{% url 'imacs_app:task_modify_tasked_user' task.id %}">Task user</a></td>
 </tr>
 {% endfor %}
 </table>

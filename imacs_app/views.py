@@ -240,9 +240,10 @@ class TaskCategoryDelete(UserCanViewTaskCategoryMixin, generic.edit.DeleteView):
 def task_model_form_factory(task_list_id):
     class TheForm(model_forms.ModelForm):
         task_category = forms.ModelChoiceField(queryset=TaskCategory.objects.filter(task_list__pk=task_list_id))
+        tasked_user = forms.ModelChoiceField(queryset=auth.models.User.objects.filter(tasklist__pk=task_list_id), required=False)
         class Meta:
             model = Task
-            fields = ['task_category', 'name', 'duration', 'period', 'description']
+            fields = ['task_category', 'name', 'duration', 'period', 'description', 'tasked_user']
     return TheForm
 
 class TaskCreate(UserCanViewTaskListMixin, generic.edit.CreateView):
@@ -288,6 +289,28 @@ class TaskDelete(UserCanViewTaskMixin, generic.edit.DeleteView):
     def get_success_url(self):
         return reverse('imacs_app:task_list_summary', kwargs={'task_list_id': self.object.task_category.task_list.id})
 
+def task_modify_tasked_user_form_factory(task_list_id):
+    class TheForm(model_forms.ModelForm):
+        tasked_user = forms.ModelChoiceField(queryset=auth.models.User.objects.filter(tasklist__pk=task_list_id), required=False)
+        class Meta:
+            model = Task
+            fields = ['tasked_user']
+    return TheForm
+
+class TaskModifyTaskedUser(UserCanViewTaskMixin, generic.edit.UpdateView):
+    model = Task
+    template_name = 'imacs_app/task_modify_tasked_user.html'
+    context_object_name = 'task'
+    pk_url_kwarg = 'task_id'
+
+    def get_form_class(self):
+        task_id = self.kwargs['task_id']
+        task = get_object_or_404(Task, pk=task_id)
+        return task_modify_tasked_user_form_factory(task.task_category.task_list.pk)
+
+    def get_success_url(self):
+        return reverse('imacs_app:task_list_todo', kwargs={'task_list_id': self.object.task_category.task_list.id})
+
 class TaskDoneAddNow(UserCanViewTaskMixin, generic.edit.CreateView):
     model = TaskDone
     template_name = 'imacs_app/task_add_done_now.html'
@@ -303,8 +326,13 @@ class TaskDoneAddNow(UserCanViewTaskMixin, generic.edit.CreateView):
         return reverse('imacs_app:task_list_todo', kwargs={'task_list_id': self.object.task.task_category.task_list.id})
 
     def form_valid(self, form):
+        # TODO is there a better way to do tis?
         form.instance.task_id = self.kwargs['task_id']
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        task = get_object_or_404(Task, pk=self.kwargs['task_id'])
+        task.tasked_user = None
+        task.save()
+        return response
 
 class TaskDoneAdd(UserCanViewTaskMixin, generic.edit.CreateView):
     model = TaskDone
