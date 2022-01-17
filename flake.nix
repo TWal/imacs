@@ -10,14 +10,6 @@
   let
     system = "x86_64-linux";
     pkgs = import nixpkgs { inherit system; };
-    args = {
-      name = "imacs";
-      keys-file = "${./dev_secrets.sh}";
-      src = ./.;
-      inherit pkgs;
-      settings = "imacs.settings.nix";
-    };
-    nixosModule = django-nixos.lib.mkNixosModule args;
     python = pkgs.python38.withPackages (ps: with ps; [ django_3 ]);
   in
   {
@@ -28,7 +20,12 @@
         source ${./dev_secrets.sh}
       '';
     };
-    nixosModules = { imacs = nixosModule; };
-    inherit nixosModule;
+    mkNixosModule = { fqdn, keys-file }: django-nixos.lib.mkNixosModule {
+      name = "imacs";
+      inherit pkgs;
+      inherit keys-file fqdn;
+      src = ./.;
+      settings = "imacs.settings.nix";
+    };
   };
 }
