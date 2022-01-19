@@ -6,13 +6,16 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from datetime import timedelta
 
+def none_to_zero(x):
+    return x if x is not None else 0
+
 def compute_minute_per_day(tasks):
     result = tasks.aggregate(minute_per_day=models.Sum((1.0*models.F('duration'))/models.F('period')))
-    return result['minute_per_day']
+    return none_to_zero(result['minute_per_day'])
 
 def compute_duration(tasks):
     result = tasks.aggregate(duration=models.Sum('duration'))
-    return result['duration']
+    return none_to_zero(result['duration'])
 
 class TaskList(models.Model):
     name = models.CharField(max_length=200)
@@ -32,8 +35,7 @@ class TaskList(models.Model):
 
     def minute_done_since(self, delta):
         tasks = Task.objects.filter(task_category__task_list = self, taskdone__when__gte = timezone.now() - delta).distinct()
-        result = compute_duration(tasks)
-        return result if result is not None else 0
+        return compute_duration(tasks)
 
     def minute_done_since_last_week(self):
         return self.minute_done_since(timedelta(days=7))
