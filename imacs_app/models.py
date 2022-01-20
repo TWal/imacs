@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from datetime import timedelta
+from random import random
 
 def none_to_zero(x):
     return x if x is not None else 0
@@ -79,6 +80,8 @@ class Task(models.Model):
     def get_absolute_url(self):
         return reverse('imacs_app:task_modify', kwargs={'task_id': self.pk})
 
+    def get_random_taskdone(self):
+        return TaskDone(task=self, when = timezone.now() - timedelta(days=random()*self.duration))
 
     def last_done(self):
         try:

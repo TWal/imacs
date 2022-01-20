@@ -20,6 +20,7 @@ urlpatterns = [
     path('task/<int:task_id>/delete', views.TaskDelete.as_view(), name='task_delete'),
     path('task/<int:task_id>/add_done_now', views.TaskDoneAddNow.as_view(), name='task_done_add_now'),
     path('task/<int:task_id>/add_done', views.TaskDoneAdd.as_view(), name='task_done_add'),
+    path('task/<int:task_id>/add_done_random', views.TaskDoneAddRandom.as_view(), name='task_done_add_random'),
     path('task_done/<int:task_done_id>/delete', views.TaskDoneDelete.as_view(), name='task_done_delete'),
 
     path('login', auth_views.LoginView.as_view(), name='login'),

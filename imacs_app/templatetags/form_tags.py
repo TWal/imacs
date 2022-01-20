@@ -22,6 +22,12 @@ def is_input(field):
     ))
 
 @register.filter
+def is_checkbox(field):
+    return isinstance(field.field.widget, (
+        forms.CheckboxInput
+    ))
+
+@register.filter
 def with_class(field, template_class):
     field_classes = field.field.widget.attrs.get('class', '')
     field_classes += " " + template_class

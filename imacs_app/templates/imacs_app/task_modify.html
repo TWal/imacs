@@ -17,7 +17,12 @@
     <input type="submit" class="button is-primary" value="Sauvegarder" />
 </form>
 
-<a href="{% url 'imacs_app:task_done_add' task.id %}">Ajouter une complétion de la tâche</a> <br />
+
+<form method="post" action="{% url 'imacs_app:task_done_add_random' task.id %}">
+    {% csrf_token %}
+    <input type="submit" class="button is-warning" value="Ajouter une complétion de la tâche aléatoire" />
+</form>
+<a class="button is-primary" href="{% url 'imacs_app:task_done_add' task.id %}">Ajouter une complétion de la tâche</a> <br />
 {% for task_done in task_dones %}
 {{ task_done.when }} ({{ task_done.duration }} min)<a href="{% url 'imacs_app:task_done_delete' task_done.id %}">Supprimer</a> <br />
 {% endfor %}

@@ -237,14 +237,16 @@ class TaskCategoryDelete(UserCanViewTaskCategoryMixin, generic.edit.DeleteView):
     def get_success_url(self):
         return reverse('imacs_app:task_list_summary', kwargs={'task_list_id': self.object.task_list.id})
 
-def task_model_form_factory(task_list_id):
+def task_model_form_factory(task_list_id, include_random_completion_checkbox):
     class TheForm(model_forms.ModelForm):
         task_category = forms.ModelChoiceField(queryset=TaskCategory.objects.filter(task_list__pk=task_list_id))
         tasked_user = forms.ModelChoiceField(queryset=auth.models.User.objects.filter(tasklist__pk=task_list_id), required=False)
         class Meta:
             model = Task
             fields = ['task_category', 'name', 'duration', 'period', 'description', 'tasked_user']
-    return TheForm
+    class TheForm2(TheForm):
+        add_random_completion = forms.BooleanField(required=False, initial=True)
+    return TheForm2 if include_random_completion_checkbox else TheForm
 
 class TaskCreate(UserCanViewTaskListMixin, generic.edit.CreateView):
     template_name = 'imacs_app/task_create.html'
@@ -259,8 +261,15 @@ class TaskCreate(UserCanViewTaskListMixin, generic.edit.CreateView):
         context['task_list'] = task_list
         return context
 
+    def form_valid(self, form):
+        #TODO: there may be a better way to do it?
+        response = super().form_valid(form)
+        if form.cleaned_data['add_random_completion']:
+            self.object.get_random_taskdone().save()
+        return response
+
     def get_form_class(self):
-        return task_model_form_factory(self.kwargs['task_list_id'])
+        return task_model_form_factory(self.kwargs['task_list_id'], True)
 
 class TaskModify(UserCanViewTaskMixin, generic.edit.UpdateView):
     model = Task
@@ -279,7 +288,7 @@ class TaskModify(UserCanViewTaskMixin, generic.edit.UpdateView):
     def get_form_class(self):
         task_id = self.kwargs['task_id']
         task = get_object_or_404(Task, pk=task_id)
-        return task_model_form_factory(task.task_category.task_list.pk)
+        return task_model_form_factory(task.task_category.task_list.pk, False)
 
 class TaskDelete(UserCanViewTaskMixin, generic.edit.DeleteView):
     model = Task
@@ -326,7 +335,7 @@ class TaskDoneAddNow(UserCanViewTaskMixin, generic.edit.CreateView):
         return reverse('imacs_app:task_list_todo', kwargs={'task_list_id': self.object.task.task_category.task_list.id})
 
     def form_valid(self, form):
-        # TODO is there a better way to do tis?
+        # TODO is there a better way to do this?
         form.instance.task_id = self.kwargs['task_id']
         response = super().form_valid(form)
         task = get_object_or_404(Task, pk=self.kwargs['task_id'])
@@ -350,6 +359,27 @@ class TaskDoneAdd(UserCanViewTaskMixin, generic.edit.CreateView):
 
     def form_valid(self, form):
         form.instance.task_id = self.kwargs['task_id']
+        return super().form_valid(form)
+
+class TaskDoneAddRandom(UserCanViewTaskMixin, generic.detail.SingleObjectMixin, generic.edit.FormView):
+    model = Task
+    template_name = 'imacs_app/task_done_add_random.html'
+    pk_url_kwarg = 'task_id'
+    form_class = forms.Form # Empty form
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('imacs_app:task_modify', kwargs={'task_id': self.object.id})
+
+    def form_valid(self, form):
+        self.object.get_random_taskdone().save()
         return super().form_valid(form)
 
 class TaskDoneDelete(UserCanViewTaskDoneMixin, generic.edit.DeleteView):

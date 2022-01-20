@@ -15,6 +15,12 @@
     <label class="label" {% if field.auto_id %} for="{{ field.auto_id }}" {% endif %}> {{ field.label }} </label>
     <div class="control">
         {{ field | with_class:'textarea' }}
+{% elif field|is_checkbox %}
+    <div class="control">
+        <label class="checkbox" {% if field.auto_id %} for="{{ field.auto_id }}" {% endif %}>
+            {{ field | with_class:'checkbox' }}
+            {{ field.label }}
+        </label>
 {% else %}
     <div class="control">
 TODO
