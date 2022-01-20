@@ -21,7 +21,7 @@
     <details class="block">
         <summary>{{ task.name }} ({{ task.duration }}min / {{ task.period }}j) <a class="button is-small is-warning" href="{% url 'imacs_app:task_modify' task.id %}"> Modifier </a></summary>
         <div class="box">
-        {{ task.description }}
+        {{ task.description | linebreaks}}
         <br />{{ task.last_done }} {{ task.priority }}
         </div>
     </details>
