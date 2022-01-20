@@ -81,7 +81,7 @@ class Task(models.Model):
         return reverse('imacs_app:task_modify', kwargs={'task_id': self.pk})
 
     def get_random_taskdone(self):
-        return TaskDone(task=self, when = timezone.now() - timedelta(days=random()*self.duration))
+        return TaskDone(task=self, when = timezone.now() - timedelta(days=random()*self.period))
 
     def last_done(self):
         try:
