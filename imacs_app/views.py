@@ -215,6 +215,18 @@ class TaskListMyTasks(UserCanViewTaskListMixin, generic.ListView):
         context['task_list'] = self.task_list
         return context
 
+class TaskListCompletions(UserCanViewTaskListMixin, generic.ListView):
+    template_name = 'imacs_app/task_list_completions.html'
+    context_object_name = 'task_dones'
+    def get_queryset(self):
+        task_list_id = self.kwargs['task_list_id']
+        self.task_list = get_object_or_404(TaskList, pk=task_list_id)
+        task_dones = TaskDone.objects.filter(task__task_category__task_list__id = task_list_id).order_by('-when').all()[:30]
+        return task_dones
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['task_list'] = self.task_list
+        return context
 
 class TaskCategoryCreate(UserCanViewTaskListMixin, generic.edit.CreateView):
     model = TaskCategory

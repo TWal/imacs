@@ -3,5 +3,6 @@
         <li {% ifequal task_list_active_tab "todo" %}class="is-active"{% endifequal %}><a href="{% url 'imacs_app:task_list_todo' task_list.id %}">To do</a></li>
         <li {% ifequal task_list_active_tab "summary" %}class="is-active"{% endifequal %}><a href="{% url 'imacs_app:task_list_summary' task_list.id %}">Summary</a></li>
         <li {% ifequal task_list_active_tab "my_tasks" %}class="is-active"{% endifequal %}><a href="{% url 'imacs_app:task_list_my_tasks' task_list.id %}">My tasks</a></li>
+        <li {% ifequal task_list_active_tab "completions" %}class="is-active"{% endifequal %}><a href="{% url 'imacs_app:task_list_completions' task_list.id %}">Last completions</a></li>
     </ul>
 </div>

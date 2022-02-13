@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% load breadcrumb %}
+{% load utils %}
+{% block breadcrumb %}
+{% breadcrumb task_list %}
+{% breadcrumb_text_active 'Last completions' %}
+{% endblock %}
+
+{% block content %}
+<h1 class="title is-1"> {{ task_list.name }}</h1>
+{% with "completions" as task_list_active_tab %}{% include 'imacs_app/task_list_tabs.html' %}{% endwith %}
+
+{% if not task_dones %}
+<div class="block">
+No completion!
+</div>
+{% endif %}
+
+<table class="table">
+    <thead><tr>
+        <th> What </th>
+        <th> When </th>
+        <th> How long </th>
+    </tr></thead>
+    <tbody>
+    {% for task_done in task_dones %}
+        <tr>
+            <td><a href="{% url 'imacs_app:task_modify' task_done.task.id %}"> {{ task_done.task.task_category.name }}/{{ task_done.task.name }}</a></td>
+            <td> {{ task_done.when }} </td>
+            <td> {% if task_done.duration %} {{ task_done.duration }} min {% else %} - {% endif %}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+
