@@ -33,6 +33,8 @@ class TaskList(models.Model):
         return compute_minute_per_day(Task.objects.filter(task_category__task_list = self))
     def hour_per_week(self):
         return self.minute_per_day()*7/60
+    def hour_per_week_per_user(self):
+        return self.hour_per_week()/self.users.count()
 
     def minute_done_since(self, delta):
         tasks = Task.objects.filter(task_category__task_list = self, taskdone__when__gte = timezone.now() - delta).distinct()
@@ -46,6 +48,9 @@ class TaskList(models.Model):
 
     def remaining_hours_this_week(self):
         return max(0, self.hour_per_week() - self.hour_done_since_last_week())
+
+    def minutes_for_user(self, user):
+        return compute_duration(Task.objects.filter(task_category__task_list = self, tasked_user = user))
 
 class TaskCategory(models.Model):
     task_list = models.ForeignKey(TaskList, on_delete=models.CASCADE)

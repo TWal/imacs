@@ -14,3 +14,6 @@ def format_hours(x):
     else:
         return hours_string + minutes_string
 
+@register.simple_tag
+def minutes_for_user(task_list, user):
+    return format_hours(task_list.minutes_for_user(user)/60)
