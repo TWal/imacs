@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% load breadcrumb %}
+{% load utils %}
+{% block breadcrumb %}
+{% breadcrumb task_list %}
+{% breadcrumb_text_active 'My tasks' %}
+{% endblock %}
+
+{% block content %}
+<h1 class="title is-1"> {{ task_list.name }}</h1>
+{% with "my_tasks" as task_list_active_tab %}{% include 'imacs_app/task_list_tabs.html' %}{% endwith %}
+
+{% if not tasks %}
+<div class="block">
+No tasks!
+</div>
+{% endif %}
+
+{% for task in tasks %}
+<div class="message">
+    <div class="message-header">
+        <p>
+            <a href="{% url 'imacs_app:task_modify' task.id %}"> {{ task.task_category.name }}/{{ task.name }}</a>
+            ({{ task.duration }} min)
+        </p>
+        <a class="button is-primary" href="{% url 'imacs_app:task_done_add_now' task.id %}">C'est fait !</a>
+    </div>
+    <div class="message-body"> {{ task.description | linebreaks}} </div>
+</div>
+{% endfor %}
+{% endblock %}
+
