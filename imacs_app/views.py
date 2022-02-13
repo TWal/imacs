@@ -140,6 +140,7 @@ class TaskListModify(generic.detail.SingleObjectMixin, UserCanViewTaskListMixin,
         'delete_user': UserForm,
     }
 
+    # TODO why should I do this?
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super().get(request, *args, **kwargs)
@@ -346,6 +347,33 @@ class TaskModifyTaskedUser(UserCanViewTaskMixin, generic.edit.UpdateView):
     def get_success_url(self):
         return reverse('imacs_app:task_list_todo', kwargs={'task_list_id': self.object.task_category.task_list.id})
 
+class TaskTaskMe(UserCanViewTaskMixin, generic.detail.SingleObjectMixin, generic.edit.FormView):
+    model = Task
+    template_name = 'imacs_app/task_task_me.html'
+    context_object_name = 'task'
+    pk_url_kwarg = 'task_id'
+    form_class = forms.Form # empty form
+
+    # TODO why should I do this?
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('imacs_app:task_list_todo', kwargs={'task_list_id': self.object.task_category.task_list.id})
+
+    def form_valid(self, form):
+        # TODO is there a better way to do this?
+        response = super().form_valid(form)
+        task = get_object_or_404(Task, pk=self.kwargs['task_id'])
+        task.tasked_user = self.request.user
+        task.save()
+        return response
+
 class TaskDoneAddNow(UserCanViewTaskMixin, generic.edit.CreateView):
     model = TaskDone
     template_name = 'imacs_app/task_add_done_now.html'
@@ -393,6 +421,7 @@ class TaskDoneAddRandom(UserCanViewTaskMixin, generic.detail.SingleObjectMixin, 
     pk_url_kwarg = 'task_id'
     form_class = forms.Form # Empty form
 
+    # TODO why should I do this?
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super().get(request, *args, **kwargs)
