@@ -17,7 +17,7 @@
     <tr><td>Remaining work time:     </td><td>{{ task_list.remaining_hours_this_week | format_hours }}</td></tr>
 </table>
 <div class="block container is-max-desktop">
-    <progress class="progress {% if task_list.hour_done_since_last_week < task_list.hour_per_week %}is-danger{% else %}is-success{% endif %}" value="{{ task_list.hour_done_since_last_week }}" max="{{ task_list.hour_per_week }}">{% widthratio task_list.hour_done_since_last_week task_list.hour_per_week 100 %}%</progress>
+    <progress class="progress is-success" value="{{ task_list.hour_done_since_last_week }}" max="{{ task_list.hour_per_week }}">{% widthratio task_list.hour_done_since_last_week task_list.hour_per_week 100 %}%</progress>
 </div>
 
 <table class="table">
