@@ -11,15 +11,11 @@
 <h1 class="title is-1"> {{ task_list.name }}</h1>
 {% with "todo" as task_list_active_tab %}{% include 'imacs_app/task_list_tabs.html' %}{% endwith %}
 
-<div class="block">
-Work time done last week: {{ task_list.hour_done_since_last_week | format_hours }}
-</div>
-<div class="block">
-Work time per week: {{ task_list.hour_per_week | format_hours }}
-</div>
-<div class="block">
-Remaining work time: {{ task_list.remaining_hours_this_week | format_hours }}
-</div>
+<table class="table">
+    <tr><td>Work time per week:      </td><td>{{ task_list.hour_per_week | format_hours }}</td></tr>
+    <tr><td>Work time done last week:</td><td>{{ task_list.hour_done_since_last_week | format_hours }}</td></tr>
+    <tr><td>Remaining work time:     </td><td>{{ task_list.remaining_hours_this_week | format_hours }}</td></tr>
+</table>
 <div class="block container is-max-desktop">
     <progress class="progress {% if task_list.hour_done_since_last_week < task_list.hour_per_week %}is-danger{% else %}is-success{% endif %}" value="{{ task_list.hour_done_since_last_week }}" max="{{ task_list.hour_per_week }}">{% widthratio task_list.hour_done_since_last_week task_list.hour_per_week 100 %}%</progress>
 </div>
