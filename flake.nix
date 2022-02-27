@@ -20,12 +20,6 @@
         source ${./dev_secrets.sh}
       '';
     };
-    mkNixosModule = { fqdn, keys-file }: django-nixos.lib.mkNixosModule {
-      name = "imacs";
-      inherit pkgs;
-      inherit keys-file fqdn;
-      src = ./.;
-      settings = "imacs.settings.nix";
-    };
+    nixosModules.imacs = { imports = [ django-nixos.nixosModules.django ./module.nix ]; };
   };
 }
