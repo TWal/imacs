@@ -35,23 +35,21 @@ in {
   config = lib.mkIf cfg.enable
     (lib.mkMerge [
       {
-        services.django.enable = true;
-        services.django.servers.imacs = {
+        services.wsgi.enable = true;
+        services.wsgi.applications.imacs = {
           root = ./.;
-          settings = if cfg.unsafeSettings
-                     then "imacs.settings.nix-unsafe"
-                     else "imacs.settings.nix";
-          port = 8001;
           inherit (cfg) keysFile setupNginx hostName;
+          unixSocket.path = "/run/imacs.sock";
+          django.settings =
+            if cfg.unsafeSettings
+            then "imacs.settings.nix-unsafe"
+            else "imacs.settings.nix";
         };
-
-        warnings = if cfg.unsafeSettings
-                   then [ "IMACS is configured with unsafe settings" ]
-                   else [ ];
       }
       (lib.mkIf (cfg.enable && cfg.setupNginx) { services.nginx.enable = true; })
       (lib.mkIf (cfg.enable && cfg.setupNginx && !cfg.unsafeSettings) {
         services.nginx.virtualHosts."${cfg.hostName}".forceSSL = true;
       })
+      (lib.mkIf cfg.unsafeSettings { warnings = [ "IMACS is configured with unsafe settings" ]; })
     ]);
 }
