@@ -44,6 +44,7 @@ in {
             if cfg.unsafeSettings
             then "imacs.settings.nix-unsafe"
             else "imacs.settings.nix";
+          security.noNetwork = true;
         };
       }
       (lib.mkIf (cfg.enable && cfg.setupNginx) { services.nginx.enable = true; })
