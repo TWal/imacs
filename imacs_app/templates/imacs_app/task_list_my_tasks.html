@@ -24,7 +24,7 @@ No tasks!
             <a href="{% url 'imacs_app:task_modify' task.id %}"> {{ task.task_category.name }}/{{ task.name }}</a>
             ({{ task.duration }} min)
         </p>
-        <a class="button is-primary" href="{% url 'imacs_app:task_done_add_now' task.id %}">C'est fait !</a>
+        <a class="button is-primary" href="{% url 'imacs_app:task_done_add_now' task.id 'my_tasks' %}">C'est fait !</a>
     </div>
     <div class="message-body"> {{ task.description | linebreaks}} </div>
 </div>

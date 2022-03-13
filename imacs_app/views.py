@@ -386,7 +386,11 @@ class TaskDoneAddNow(UserCanViewTaskMixin, generic.edit.CreateView):
         return context
 
     def get_success_url(self):
-        return reverse('imacs_app:task_list_todo', kwargs={'task_list_id': self.object.task.task_category.task_list.id})
+        task_list_id = self.object.task.task_category.task_list.id
+        if self.kwargs['next'] == 'my_tasks':
+            return reverse('imacs_app:task_list_my_tasks', kwargs={'task_list_id': task_list_id})
+        else:
+            return reverse('imacs_app:task_list_todo', kwargs={'task_list_id': task_list_id})
 
     def form_valid(self, form):
         # TODO is there a better way to do this?

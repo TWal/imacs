@@ -50,7 +50,7 @@
     <td {% if task.priority >= 1.5 %}class="is-danger"{% elif task.priority >= 1 %}class="is-warning"{% else %}class="is-success"{% endif %}>{{ task.priority | floatformat:2}}</td>
     <td><a href="{% url 'imacs_app:task_modify' task.id %}"> {{ task.task_category.name }}/{{ task.name }}</a></td>
     <td>{{ task.duration }} min</td>
-    <td><a class="button is-primary" href="{% url 'imacs_app:task_done_add_now' task.id %}">C'est fait !</a></td>
+    <td><a class="button is-primary" href="{% url 'imacs_app:task_done_add_now' task.id 'todo' %}">C'est fait !</a></td>
     <td>
         {% if task.tasked_user %}
             {{ task.tasked_user }}
