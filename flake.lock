@@ -2,11 +2,11 @@
   "nodes": {
     "django-nixos": {
       "locked": {
-        "lastModified": 1642402800,
-        "narHash": "sha256-BrsOBGymjgl8tS8nXETGqyN4p9oAFTDQFnVWifZrCq0=",
+        "lastModified": 1646809200,
+        "narHash": "sha256-tQCMndhyra7cVV1izPvXmJ3pY6SMHIJ6ZhuENL+Tt98=",
         "owner": "pnmadelaine",
         "repo": "django-nixos",
-        "rev": "31d154470c32ecdc87961b052e5641b852de3a6c",
+        "rev": "0c30e449e404b8975c7f0c1a20d9ee227a244449",
         "type": "github"
       },
       "original": {
